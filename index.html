@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biểu Mẫu Báo Cáo Ngày</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
+    <style>
+        .table-container { overflow-x: auto; }
+        input[type="number"] { min-width: 60px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8 font-sans text-gray-800 relative">
+    
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-white bg-opacity-90 z-50 flex-col items-center justify-center">
+        <div class="spinner mb-4"></div>
+        <p class="text-blue-700 font-bold text-lg">Đang gửi dữ liệu, vui lòng chờ...</p>
+    </div>
+
+    <div id="errorOverlay" class="hidden fixed inset-0 bg-red-900 bg-opacity-95 z-50 flex-col items-center justify-center text-center p-6">
+        <svg class="w-16 h-16 text-white mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        <h2 class="text-3xl font-bold text-white mb-2">HỆ THỐNG QUÁ TẢI</h2>
+        <p class="text-gray-200 text-lg mb-4">Dữ liệu của bạn đã được lưu nháp cục bộ.<br>Hệ thống sẽ tự động thử lại sau:</p>
+        <div id="countdownTimer" class="text-6xl font-black text-yellow-400 mb-6">10</div>
+        <p class="text-gray-300 text-sm">Vui lòng không đóng trình duyệt!</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-md border-t-4 border-blue-600">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold uppercase text-blue-700">Biểu Mẫu Báo Cáo Ngày</h1>
+            <h2 class="text-lg font-semibold mt-2">TÌNH HÌNH ĐỒNG BỘ, XỬ LÝ HỒ SƠ</h2>
+            <p class="text-gray-600 text-sm mt-1">(Hệ thống Điều phối giải quyết thủ tục hành chính – Cổng Dịch vụ công quốc gia)</p>
+        </div>
+
+        <form id="reportForm" class="space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50 p-4 rounded border border-blue-100">
+                <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                    <label for="chiNhanh" class="font-bold whitespace-nowrap mb-2 md:mb-0 w-24">Chi nhánh:</label>
+                    <select id="chiNhanh" name="chiNhanh" class="w-full border-gray-300 rounded p-2 focus:ring-blue-500 focus:border-blue-500 border bg-white" required>
+                        <option value="">-- Chọn Chi nhánh --</option>
+                    </select>
+                </div>
+                
+                <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                    <label for="diemBaoCao" class="font-bold whitespace-nowrap mb-2 md:mb-0 w-24">Điểm:</label>
+                    <select id="diemBaoCao" name="diemBaoCao" class="w-full border-gray-300 rounded p-2 focus:ring-blue-500 focus:border-blue-500 border bg-gray-100 cursor-not-allowed" required disabled>
+                        <option value="">-- Vui lòng chọn Chi nhánh --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg border-b-2 border-gray-300 mb-4 pb-2">I. TÌNH HÌNH CHUNG</h3>
+                <div class="hidden md:grid grid-cols-12 gap-4 font-bold bg-gray-200 p-3 rounded-t text-sm">
+                    <div class="col-span-1 text-center">STT</div>
+                    <div class="col-span-3">Nội dung</div>
+                    <div class="col-span-5">Kết quả ghi nhanh</div>
+                    <div class="col-span-3">Vướng mắc/kiến nghị</div>
+                </div>
+
+                <div class="space-y-4 md:space-y-0">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>1</div>
+                        <div class="col-span-3 font-semibold">Cổng DVCQG</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label><input type="radio" name="kq_dvcqg" value="Bình thường" required> Bình thường</label>
+                            <label><input type="radio" name="kq_dvcqg" value="Chậm"> Chậm</label>
+                            <label><input type="radio" name="kq_dvcqg" value="Lỗi"> Lỗi</label>
+                            <label><input type="radio" name="kq_dvcqg" value="Không truy cập được"> Không truy cập được</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_dvcqg" rows="1" class="w-full border rounded p-1 text-sm placeholder-gray-400 resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>2</div>
+                        <div class="col-span-3 font-semibold">Hệ thống điều phối</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label><input type="radio" name="kq_htdp" value="Bình thường" required> Bình thường</label>
+                            <label><input type="radio" name="kq_htdp" value="Chậm"> Chậm</label>
+                            <label><input type="radio" name="kq_htdp" value="Lỗi"> Lỗi</label>
+                            <label><input type="radio" name="kq_htdp" value="Không truy cập được"> Không truy cập được</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_htdp" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>3</div>
+                        <div class="col-span-3 font-semibold">Hệ thống địa phương/Bộ ngành</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label><input type="radio" name="kq_htdp_bn" value="Khớp" required> Khớp</label>
+                            <label><input type="radio" name="kq_htdp_bn" value="Không khớp"> Không khớp</label>
+                            <label><input type="radio" name="kq_htdp_bn" value="Chưa kiểm tra được"> Chưa kiểm tra được</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_htdp_bn" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>4</div>
+                        <div class="col-span-3 font-semibold">Đường truyền</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label><input type="radio" name="kq_duongtruyen" value="Ổn định" required> Ổn định</label>
+                            <label><input type="radio" name="kq_duongtruyen" value="Chậm"> Chậm</label>
+                            <label><input type="radio" name="kq_duongtruyen" value="Mất kết nối"> Mất kết nối</label>
+                            <label><input type="radio" name="kq_duongtruyen" value="Không truy cập được"> Không truy cập được</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_duongtruyen" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>5</div>
+                        <div class="col-span-3 font-semibold">VNeID/xác thực</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label><input type="radio" name="kq_vneid" value="Bình thường" required> Bình thường</label>
+                            <label><input type="radio" name="kq_vneid" value="Lỗi QR"> Lỗi QR</label>
+                            <label><input type="radio" name="kq_vneid" value="Lỗi OTP/SMS"> Lỗi OTP/SMS</label>
+                            <label><input type="radio" name="kq_vneid" value="Lỗi ứng dụng"> Lỗi ứng dụng</label>
+                            <label><input type="radio" name="kq_vneid" value="Chưa kiểm tra"> Chưa kiểm tra</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_vneid" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50 bg-yellow-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>6</div>
+                        <div class="col-span-3 font-semibold">Tài khoản cán bộ</div>
+                        <div class="col-span-5 grid grid-cols-2 gap-2 text-sm">
+                            <label class="flex items-center gap-2">Tổng số cần dùng: <input type="number" name="tkcb_tong" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2">Đã có TK: <input type="number" name="tkcb_daco" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2">Chưa có: <input type="number" name="tkcb_chuaco" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2">Đăng nhập được: <input type="number" name="tkcb_login_ok" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2 col-span-2">Chưa đăng nhập được: <input type="number" name="tkcb_login_fail" class="border rounded p-1 w-16" min="0"></label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_tkcb" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50 bg-yellow-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>7</div>
+                        <div class="col-span-3 font-semibold">Phân quyền</div>
+                        <div class="col-span-5 space-y-2 text-sm">
+                            <div class="flex flex-wrap items-center gap-4">
+                                <label class="flex items-center gap-2">Đúng nhiệm vụ: <input type="number" name="pq_dung" class="border rounded p-1 w-16" min="0"></label>
+                                <label class="flex items-center gap-2">Thiếu/sai/thừa: <input type="number" name="pq_loi" class="border rounded p-1 w-16" min="0"></label>
+                            </div>
+                            <div class="flex items-center gap-4 pt-1">
+                                <span>CB quản trị biết phân quyền:</span>
+                                <label><input type="radio" name="pq_quantri_biet" value="Có"> Có</label>
+                                <label><input type="radio" name="pq_quantri_biet" value="Không"> Không</label>
+                            </div>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_pq" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>8</div>
+                        <div class="col-span-3 font-semibold">Dịch vụ công/lĩnh vực/thủ tục hiển thị</div>
+                        <div class="col-span-5 space-y-2 text-sm">
+                            <div class="flex gap-4">
+                                <label><input type="radio" name="kq_dvc_hienthi" value="Đầy đủ" required> Đầy đủ</label>
+                                <label><input type="radio" name="kq_dvc_hienthi" value="Chưa đầy đủ"> Chưa đầy đủ</label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span>Thiếu:</span>
+                                <textarea name="dvc_hienthi_thieu" rows="1" class="border rounded p-1 flex-1 resize-y" placeholder="Ghi rõ thông tin thiếu..."></textarea>
+                            </div>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_dvc_hienthi" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50 bg-yellow-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>9</div>
+                        <div class="col-span-3 font-semibold">Đồng bộ hồ sơ/trạng thái</div>
+                        <div class="col-span-5 space-y-2 text-sm">
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="flex flex-col">Đồng bộ đúng: <input type="number" name="dbhs_dung" class="border rounded p-1 mt-1" min="0"></label>
+                                <label class="flex flex-col">Chậm: <input type="number" name="dbhs_cham" class="border rounded p-1 mt-1" min="0"></label>
+                                <label class="flex flex-col">Sai/thiếu dữ liệu: <input type="number" name="dbhs_loi" class="border rounded p-1 mt-1" min="0"></label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="whitespace-nowrap">Mã hồ sơ lỗi:</span>
+                                <textarea name="dbhs_ma_loi" rows="1" class="border rounded p-1 flex-1 resize-y" placeholder="VD: , H26..."></textarea>
+                            </div>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_dbhs" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 border-b pb-4 md:p-3 items-start hover:bg-gray-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>10</div>
+                        <div class="col-span-3 font-semibold">Báo cáo số liệu ngày</div>
+                        <div class="col-span-5 flex flex-col gap-2 text-sm">
+                            <label><input type="radio" name="kq_bcsl" value="Có lấy được số liệu" required> Có lấy được số liệu</label>
+                            <label><input type="radio" name="kq_bcsl" value="Không lấy được"> Không lấy được</label>
+                            <label><input type="radio" name="kq_bcsl" value="Số liệu nghi chưa đúng"> Số liệu nghi chưa đúng</label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_bcsl" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 pb-4 md:p-3 items-start hover:bg-gray-50 bg-yellow-50">
+                        <div class="col-span-1 md:text-center font-bold text-blue-600"><span class="md:hidden">STT: </span>11</div>
+                        <div class="col-span-3 font-semibold">Phản ánh cán bộ địa phương</div>
+                        <div class="col-span-5 flex flex-wrap gap-4 text-sm">
+                            <label class="flex items-center gap-2">Số phản ánh trong ngày: <input type="number" name="pa_tong" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2">Đã xử lý: <input type="number" name="pa_daxuly" class="border rounded p-1 w-16" min="0"></label>
+                            <label class="flex items-center gap-2">Chưa xử lý: <input type="number" name="pa_chuaxuly" class="border rounded p-1 w-16" min="0"></label>
+                        </div>
+                        <div class="col-span-3">
+                            <textarea name="vm_pa" rows="1" class="w-full border rounded p-1 text-sm resize-y" placeholder="Nhập vướng mắc/kiến nghị đề xuất"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg border-b-2 border-gray-300 mb-4 pb-2">II. CHI TIẾT PHẢN ÁNH</h3>
+                <div class="table-container border rounded">
+                    <table class="w-full text-left border-collapse min-w-[800px]" id="phanAnhTable">
+                        <thead>
+                            <tr class="bg-blue-100 text-sm">
+                                <th class="p-2 border border-gray-300 w-12 text-center">STT</th>
+                                <th class="p-2 border border-gray-300">Người/đơn vị phản ánh</th>
+                                <th class="p-2 border border-gray-300 w-1/4">Nội dung phản ánh cụ thể</th>
+                                <th class="p-2 border border-gray-300">Nhóm báo cáo</th>
+                                <th class="p-2 border border-gray-300">Mức ảnh hưởng</th>
+                                <th class="p-2 border border-gray-300">Kiến nghị xử lý</th>
+                                <th class="p-2 border border-gray-300 w-12 text-center">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="phanAnhBody">
+                            <tr class="text-sm">
+                                <td class="p-2 border border-gray-300 text-center row-stt">1</td>
+                                <td class="p-2 border border-gray-300"><input type="text" name="pa_nguoi[]" class="w-full border-none focus:ring-0"></td>
+                                <td class="p-2 border border-gray-300"><textarea name="pa_noidung[]" rows="1" class="w-full border-none focus:ring-0 resize-y"></textarea></td>
+                                <td class="p-2 border border-gray-300"><input type="text" name="pa_nhom[]" class="w-full border-none focus:ring-0"></td>
+                                <td class="p-2 border border-gray-300"><input type="text" name="pa_mucdo[]" class="w-full border-none focus:ring-0"></td>
+                                <td class="p-2 border border-gray-300"><input type="text" name="pa_kiennghi[]" class="w-full border-none focus:ring-0"></td>
+                                <td class="p-2 border border-gray-300 text-center">
+                                    <button type="button" class="text-red-500 font-bold hover:text-red-700" onclick="deleteRow(this)">X</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" onclick="addRow()" class="mt-3 px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded hover:bg-green-600 transition shadow">
+                    + Thêm dòng phản ánh
+                </button>
+            </div>
+
+            <div class="text-center pt-6 border-t mt-8">
+                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-700 shadow-lg w-full md:w-auto transition-transform active:scale-95">
+                    GỬI BÁO CÁO VỀ HỆ THỐNG
+                </button>
+            </div>
+        </form>
+    </div>
+
+<script>
+    // THAY BẰNG LINK DEPLOY MỚI NHẤT CỦA BẠN
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76gD7PT_cky3Cj4LQbqk3ZwGp-UY1wgGUXWsQUyTGk9byOmUMbZ3ABEMqJzf6shp3/exec';
+
+    const chiNhanhSelect = document.getElementById('chiNhanh');
+    const diemSelect = document.getElementById('diemBaoCao');
+
+    // Tự động nạp Chi nhánh từ file config.js (biến DS_DON_VI)
+    if (typeof DS_DON_VI !== 'undefined') {
+        Object.keys(DS_DON_VI).forEach(cn => {
+            let option = document.createElement('option');
+            option.value = cn; option.textContent = cn;
+            chiNhanhSelect.appendChild(option);
+        });
+    } else {
+        alert("Không tìm thấy file config.js, vui lòng kiểm tra lại đường dẫn!");
+    }
+
+    // Lắng nghe sự kiện đổi Chi nhánh
+    chiNhanhSelect.addEventListener('change', function() {
+        diemSelect.innerHTML = '<option value="">-- Chọn điểm --</option>';
+        if (this.value && DS_DON_VI[this.value]) {
+            diemSelect.disabled = false;
+            diemSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            diemSelect.classList.add('bg-white');
+            DS_DON_VI[this.value].forEach(diem => {
+                let opt = document.createElement('option');
+                opt.value = diem; opt.textContent = diem;
+                diemSelect.appendChild(opt);
+            });
+        } else {
+            diemSelect.disabled = true;
+            diemSelect.classList.add('bg-gray-100', 'cursor-not-allowed');
+        }
+    });
+
+    // THÊM DÒNG BẢNG
+    function addRow() {
+        const tbody = document.getElementById('phanAnhBody');
+        const rowCount = tbody.getElementsByTagName('tr').length;
+        const newRow = document.createElement('tr');
+        newRow.className = "text-sm";
+        newRow.innerHTML = `
+            <td class="p-2 border border-gray-300 text-center row-stt">${rowCount + 1}</td>
+            <td class="p-2 border border-gray-300"><input type="text" name="pa_nguoi[]" class="w-full border-none focus:ring-0"></td>
+            <td class="p-2 border border-gray-300"><textarea name="pa_noidung[]" rows="1" class="w-full border-none focus:ring-0 resize-y"></textarea></td>
+            <td class="p-2 border border-gray-300"><input type="text" name="pa_nhom[]" class="w-full border-none focus:ring-0"></td>
+            <td class="p-2 border border-gray-300"><input type="text" name="pa_mucdo[]" class="w-full border-none focus:ring-0"></td>
+            <td class="p-2 border border-gray-300"><input type="text" name="pa_kiennghi[]" class="w-full border-none focus:ring-0"></td>
+            <td class="p-2 border border-gray-300 text-center"><button type="button" class="text-red-500 font-bold hover:text-red-700" onclick="deleteRow(this)">X</button></td>
+        `;
+        tbody.appendChild(newRow);
+    }
+
+    // XÓA DÒNG BẢNG
+    function deleteRow(btn) {
+        const row = btn.parentNode.parentNode;
+        const tbody = row.parentNode;
+        if(tbody.getElementsByTagName('tr').length === 1) {
+            alert("Phải giữ lại ít nhất 1 dòng!"); return;
+        }
+        tbody.removeChild(row);
+        // Đánh lại STT
+        const rows = tbody.getElementsByTagName('tr');
+        for(let i=0; i<rows.length; i++) {
+            rows[i].querySelector('.row-stt').innerText = i + 1;
+        }
+    }
+
+    // XỬ LÝ GỬI FORM
+    const form = document.getElementById('reportForm');
+    
+    form.addEventListener('input', () => {
+        const formData = new FormData(form);
+        const dataObj = Object.fromEntries(formData.entries());
+        localStorage.setItem('draft_report_form', JSON.stringify(dataObj));
+    });
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!confirm("Dữ liệu đã gửi không thể sửa đổi. Bạn có chắc chắn muốn gửi báo cáo này?")) return;
+        await attemptSubmit();
+    });
+
+    async function attemptSubmit() {
+        document.getElementById('loadingOverlay').classList.remove('hidden');
+        document.getElementById('loadingOverlay').classList.add('flex');
+        document.getElementById('errorOverlay').classList.add('hidden');
+        document.getElementById('errorOverlay').classList.remove('flex');
+
+        const formData = new FormData(form);
+        const dataObj = {};
+        
+        // Gom mảng
+        for (let key of formData.keys()) {
+            if (key.endsWith('[]')) {
+                dataObj[key] = formData.getAll(key);
+            } else {
+                dataObj[key] = formData.get(key);
+            }
+        }
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+            // THÊM THUỘC TÍNH mode: 'no-cors' ĐỂ TRÁNH LỖI ĐỌC PHẢN HỒI TRÊN MÔI TRƯỜNG LOCAL
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(dataObj),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            alert('Đã gửi báo cáo thành công!');
+            form.reset();
+            localStorage.removeItem('draft_report_form');
+            window.location.reload();
+
+        } catch (error) {
+            handleOverload();
+        } finally {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+            document.getElementById('loadingOverlay').classList.remove('flex');
+        }
+    }
+
+    function handleOverload() {
+        const overlay = document.getElementById('errorOverlay');
+        const countText = document.getElementById('countdownTimer');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        
+        let timeLeft = 10;
+        countText.innerText = timeLeft;
+        
+        const timer = setInterval(() => {
+            timeLeft -= 1;
+            countText.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                attemptSubmit();
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>
