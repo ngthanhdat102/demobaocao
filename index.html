@@ -275,7 +275,7 @@
     </div>
 
 <script>
-    /
+    // 
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBcBYVrze5SGSPunVCW6T7QJJ1dQ5ook15_gywCVZH7qPPC0-Q-0fj21iqDCDpuvt1/exec';
 
     const chiNhanhSelect = document.getElementById('chiNhanh');
@@ -292,7 +292,7 @@
         alert("Không tìm thấy file config.js, vui lòng kiểm tra lại đường dẫn!");
     }
 
-    // Lắng nghe sự kiện đổi Chi nhánh
+    // Đổi CN
     chiNhanhSelect.addEventListener('change', function() {
         diemSelect.innerHTML = '<option value="">-- Chọn điểm --</option>';
         if (this.value && DS_DON_VI[this.value]) {
