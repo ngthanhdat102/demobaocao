@@ -60,6 +60,7 @@ const DS_DON_VI = {
       "Chi nhánh số 6": [
         "Điểm Hỗ trợ dịch vụ công số Việt Hưng",
         "Điểm Hỗ trợ dịch vụ công số Long Biên", 
+        "Điểm Hỗ trợ dịch vụ công số Phúc Lợi",  
         "Điểm Hỗ trợ dịch vụ công số Bồ Đề", 
         "Điểm Hỗ trợ dịch vụ công số Gia Lâm", 
         "Điểm Hỗ trợ dịch vụ công số Phù Đổng 1", 
