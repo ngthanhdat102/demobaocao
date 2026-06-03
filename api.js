@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycby76gD7PT_cky3Cj4LQbqk3ZwGp-UY1wgGUXWsQUyTGk9byOmUMbZ3ABEMqJzf6shp3/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzBcBYVrze5SGSPunVCW6T7QJJ1dQ5ook15_gywCVZH7qPPC0-Q-0fj21iqDCDpuvt1/exec';
 
 const ApiService = {
     async sendData(payload) {
